@@ -37,9 +37,9 @@ class ListingModule implements ModuleInterface
     public function publish(PublisherInterface $publisher, DirectoriesInterface $directories)
     {
         $publisher->publishDirectory(
-            __DIR__ . '/../resources',                        //js, css
-            $directories->directory('public') . 'resources',  //Expected directory in webroot
-            PublisherInterface::OVERWRITE                     //We can safely overwrite resources
+            __DIR__ . '/../resources',          //js, css
+            $directories->directory('public'),  //Expected directory in webroot
+            PublisherInterface::OVERWRITE       //We can safely overwrite resources
         );
     }
 }
