@@ -26,6 +26,10 @@ class ListingModule implements ModuleInterface
      */
     public function register(RegistratorInterface $registrator)
     {
+        $registrator->configure('tokenizer', 'directories', 'spiral/listing', [
+            "directory('libraries') . 'spiral/snapshotter',",
+        ]);
+
         $registrator->configure('views', 'namespaces.spiral', 'spiral/listing', [
             "directory('libraries') . 'spiral/listing/source/views/',",
         ]);
