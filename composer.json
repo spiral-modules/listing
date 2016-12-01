@@ -1,0 +1,21 @@
+{
+  "name": "spiral/listing",
+  "description": "Spiral Framework data listing on steroids",
+  "authors": [
+    {
+      "name": "Anton Titov / Wolfy-J",
+      "email": "wolfy.jd@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0",
+    "spiral/framework": "*",
+    "spiral/components": "*",
+    "spiral/toolkit": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Spiral\\": "source/"
+    }
+  }
+}
