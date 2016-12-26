@@ -81,7 +81,7 @@ Create view:
 Create ```Listing``` instance and pass it to view:
 
 ```php
-public function listing(RecordSelector $selector) : Listing
+public function accountsListing(RecordSelector $selector) : Listing
 {
     /** @var Listing $listing */
     $listing = $this->factory->make(Listing::class, [
@@ -112,7 +112,7 @@ public function listing(RecordSelector $selector) : Listing
 
 public function indexAction(AccountsSource $source) : string
 {
-    $listing = $this->listing($source->find());
+    $listing = $this->listings->accountsListing($source->find());
 
     return $this->views->render('keeper:accounts/list', [
         'listing' => $listing,
