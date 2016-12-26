@@ -34,7 +34,7 @@ class App extends Core
 
 Create view:
 
-```
+```php
 <dark:use path="spiral:listing/*" prefix="listing:"/>
 
 <?php #compile
