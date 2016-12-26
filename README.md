@@ -112,7 +112,7 @@ public function accountsListing(RecordSelector $selector) : Listing
 
 public function indexAction(AccountsSource $source) : string
 {
-    $listing = $this->listings->accountsListing($source->find());
+    $listing = $this->accounts->accountsListing($source->find());
 
     return $this->views->render('keeper:accounts/list', [
         'listing' => $listing,
