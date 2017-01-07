@@ -3,7 +3,7 @@
 Install module and register it:
 
 ```
-composer install spiral/listing
+composer require spiral/listing
 ./spiral register spiral/listing 
 ```
 
