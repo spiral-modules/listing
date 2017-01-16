@@ -106,7 +106,7 @@ class InputState implements StateInterface
      */
     public function activeFilters()
     {
-        $filters = $this->input->getValue($this->source, "{$this->namespace}." . self::FILTERS);
+        $filters = $this->input->getValue($this->source, $this->namespaced(self::FILTERS));
 
         if (empty($filters) || !is_array($filters)) {
             $filters = [];
@@ -122,7 +122,7 @@ class InputState implements StateInterface
     {
         $value = $this->input->getValue(
             $this->source,
-            "{$this->namespace}." . self::FILTER_VALUES . '.' . $filter
+            $this->namespaced(self::FILTER_VALUES . '.' . $filter)
         );
 
         if (null == $value) {
@@ -137,7 +137,7 @@ class InputState implements StateInterface
      */
     public function activeSorter()
     {
-        $sorter = $this->input->getValue($this->source, "{$this->namespace}." . self::SORTER);
+        $sorter = $this->input->getValue($this->source, $this->namespaced(self::SORTER));
         if (empty($sorter)) {
             $sorter = 'id';
         }
@@ -150,7 +150,7 @@ class InputState implements StateInterface
      */
     public function sortDirection()
     {
-        $direction = $this->input->getValue($this->source, "{$this->namespace}." . self::DIRECTION);
+        $direction = $this->input->getValue($this->source, $this->namespaced(self::DIRECTION));
 
         if (strtolower($direction) == 'desc' || $direction == -1) {
             return DirectionalSorter::DESC;
@@ -164,7 +164,7 @@ class InputState implements StateInterface
      */
     public function getPage()
     {
-        return (int)$this->input->getValue($this->source, "{$this->namespace}." . self::PAGE);
+        return (int)$this->input->getValue($this->source, $this->namespaced(self::PAGE));
     }
 
     /**
@@ -172,6 +172,20 @@ class InputState implements StateInterface
      */
     public function getLimit()
     {
-        return (int)$this->input->getValue($this->source, "{$this->namespace}." . self::LIMIT);
+        return (int)$this->input->getValue($this->source, $this->namespaced(self::LIMIT));
+    }
+
+    /**
+     * Add namespace if needed
+     * @param string $string
+     * @return string
+     */
+    protected function namespaced($string)
+    {
+        if (!empty($this->namespace)) {
+            return "{$this->namespace}." . $string;
+        }
+
+        return $string;
     }
 }
