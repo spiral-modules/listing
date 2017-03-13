@@ -11,7 +11,7 @@
     "php": ">=7.0",
     "spiral/framework": "*",
     "spiral/components": "*",
-    "spiral/toolkit": "*"
+    "spiral/toolkit": "~0.9"
   },
   "autoload": {
     "psr-4": {

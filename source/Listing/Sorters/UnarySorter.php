@@ -7,6 +7,7 @@
  */
 namespace Spiral\Listing\Sorters;
 
+use Spiral\Database\Builders\SelectQuery;
 use Spiral\Listing\Dependency;
 use Spiral\Listing\Exceptions\SorterException;
 use Spiral\Listing\Prototypes\DependedModificator;
@@ -31,7 +32,7 @@ class UnarySorter extends DependedModificator implements SorterInterface
     private $sortBy = [];
 
     /**
-     * @param array $sortBy
+     * @param array            $sortBy
      * @param array|Dependency $dependencies
      */
     public function __construct(array $sortBy, $dependencies = [])
@@ -53,7 +54,7 @@ class UnarySorter extends DependedModificator implements SorterInterface
             foreach ($this->sortBy as $expression => $direction) {
                 $selector = $selector->orderBy(
                     $expression,
-                    $direction == self::ASC ? RecordSelector::SORT_ASC : RecordSelector::SORT_DESC
+                    $direction == self::ASC ? SelectQuery::SORT_ASC : SelectQuery::SORT_DESC
                 );
             }
 

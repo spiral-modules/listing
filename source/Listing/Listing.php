@@ -14,8 +14,8 @@ use Spiral\Listing\Exceptions\SorterException;
 use Spiral\Listing\Traits\SelectorValidationTrait;
 use Spiral\ODM\Entities\DocumentSelector;
 use Spiral\ORM\Entities\RecordSelector;
-use Spiral\Pagination\CountingPaginator;
-use Spiral\Pagination\PaginableInterface;
+use Spiral\Pagination\Paginator;
+use Spiral\Pagination\PaginatorAwareInterface;
 
 class Listing implements \IteratorAggregate
 {
@@ -62,13 +62,15 @@ class Listing implements \IteratorAggregate
     private $defaultState = null;
 
     /**
-     * @param RecordSelector|DocumentSelector|PaginableInterface $selector
-     * @param StateInterface                                     $state
+     * @param PaginatorAwareInterface|RecordSelector|DocumentSelector $selector
+     * @param StateInterface                                          $state
      *
      * @throws InvalidSelectorException
      */
-    public function __construct(PaginableInterface $selector = null, StateInterface $state = null)
-    {
+    public function __construct(
+        PaginatorAwareInterface $selector = null,
+        StateInterface $state = null
+    ) {
         if (!empty($selector)) {
             $this->validateSelector($selector);
             $this->selector = $selector;
@@ -82,13 +84,13 @@ class Listing implements \IteratorAggregate
     /**
      * Set active listing selector.
      *
-     * @param RecordSelector|DocumentSelector|PaginableInterface $selector
+     * @param RecordSelector|DocumentSelector|PaginatorAwareInterface $selector
      *
      * @return $this
      *
      * @throws InvalidSelectorException
      */
-    public function setSelector(PaginableInterface $selector)
+    public function setSelector(PaginatorAwareInterface $selector)
     {
         $this->validateSelector($selector);
         $this->selector = $selector;
@@ -246,13 +248,13 @@ class Listing implements \IteratorAggregate
     /**
      * Modify selector
      *
-     * @param PaginableInterface|RecordSelector|DocumentSelector $selector
+     * @param PaginatorAwareInterface|RecordSelector|DocumentSelector $selector
      *
      * @return RecordSelector|DocumentSelector Modified selector
      *
      * @throws InvalidSelectorException
      */
-    public function configureSelector(PaginableInterface $selector)
+    public function configureSelector(PaginatorAwareInterface $selector)
     {
         if (empty($this->state)) {
             throw new ListingException("Unable to pagination without state being set");
@@ -395,12 +397,12 @@ class Listing implements \IteratorAggregate
     /**
      * Get paginator associated with current listing
      *
-     * @return CountingPaginator
+     * @return Paginator
      */
     protected function createPaginator()
     {
-        $paginator = new CountingPaginator($this->getLimit());
-        $paginator->setPage($this->getPage());
+        $paginator = new Paginator($this->getLimit());
+        $paginator = $paginator->withPage($this->getPage());
 
         return $paginator;
     }
