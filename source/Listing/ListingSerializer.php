@@ -12,9 +12,9 @@ use Spiral\Listing\Exceptions\InvalidSelectorException;
 use Spiral\Listing\Traits\SelectorValidationTrait;
 use Spiral\ODM\Entities\DocumentSelector;
 use Spiral\ORM\Entities\RecordSelector;
-use Spiral\Pagination\PaginableInterface;
+use Spiral\Pagination\Paginator;
+use Spiral\Pagination\PaginatorAwareInterface;
 use Spiral\Pagination\PaginatorInterface;
-use Spiral\Pagination\PredictableInterface;
 
 /**
  * Packs listing state into array form.
@@ -29,17 +29,17 @@ class ListingSerializer implements \JsonSerializable
     private $listing = null;
 
     /**
-     * @var PaginableInterface|RecordSelector|DocumentSelector
+     * @var PaginatorAwareInterface|RecordSelector|DocumentSelector
      */
     private $selector = null;
 
     /**
-     * @param Listing                                            $listing
-     * @param PaginableInterface|RecordSelector|DocumentSelector $selector
+     * @param Listing                                                 $listing
+     * @param PaginatorAwareInterface|RecordSelector|DocumentSelector $selector
      *
      * @throws InvalidSelectorException
      */
-    public function __construct(Listing $listing, PaginableInterface $selector)
+    public function __construct(Listing $listing, PaginatorAwareInterface $selector)
     {
         $this->validateSelector($selector);
 
@@ -127,7 +127,7 @@ class ListingSerializer implements \JsonSerializable
          */
         $paginator = $this->selector->getPaginator();
 
-        if ($paginator instanceof PredictableInterface) {
+        if ($paginator instanceof Paginator) {
             $this->selector->getIterator();
 
             return [
@@ -147,7 +147,9 @@ class ListingSerializer implements \JsonSerializable
             ];
         } else {
             return [
-                'page'   => $paginator->getPage(),
+//                'page'   => $paginator->getPage(),
+//                'page'   => $paginator->getOffset() / $paginator->getLimit(),
+                'page'   => 1,
                 'limit'  => $paginator->getLimit(),
                 'limits' => $this->listing->getLimits()
             ];

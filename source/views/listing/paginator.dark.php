@@ -9,7 +9,7 @@
         );
     }
 
-    $__paginator__ = \Spiral\Listing\ViewModel::getPaginator($__listing__);
+    $__paginator__ = $__listing__->getSelector()->getPaginator();
     ?>
     <button class="waves-effect waves-light btn ${color} prev" page-number="<?= $__paginator__->previousPage() ?>">
         [[Prev]]

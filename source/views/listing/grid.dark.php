@@ -1,10 +1,5 @@
 <extends:spiral:element/>
 
-<block:resources>
-    <block:resources/>
-    <resource:script href="dist/sf.listing.js"/>
-</block:resources>
-
 <block:body>
     <?php #compile
     /**
@@ -27,7 +22,9 @@
     $__serializer__ = new \Spiral\Listing\ListingSerializer($__listing__, $__selector__);
     ?>
     <block:table>
-        <table class="table ${class} js-sf-listing" node:attributes id="<?= $__serializer__->getID() ?>" data-config="<?= htmlentities(json_encode($__serializer__), ENT_QUOTES, 'UTF-8') ?>">
+        <table class="table ${class} js-sf-listing stripped" id="<?= $__serializer__->getID() ?>"
+               data-config="<?= htmlentities(json_encode($__serializer__), ENT_QUOTES, 'UTF-8') ?>"
+               node:attributes>
             <thead>
             <tr>
                 <?php #compile
