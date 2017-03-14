@@ -1,4 +1,10 @@
-# Install
+# Spiral Listing
+
+[![Build Status](https://travis-ci.org/spiral-modules/listing.svg?branch=master)](https://travis-ci.org/spiral-modules/listing)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spiral-modules/listing/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/spiral-modules/listing/?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/spiral-modules/listing/badge.svg?branch=master)](https://coveralls.io/github/spiral-modules/listing?branch=master)
+
+## Install
 
 Install module and register it:
 
@@ -30,7 +36,7 @@ class App extends Core
 }
 ```
 
-# Basic usage
+## Basic usage
 
 Create view:
 

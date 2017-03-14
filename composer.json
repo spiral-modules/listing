@@ -9,8 +9,8 @@
   ],
   "require": {
     "php": ">=7.0",
-    "spiral/framework": "*",
-    "spiral/components": "*",
+    "spiral/framework": "~0.9",
+    "spiral/components": "~0.9",
     "spiral/toolkit": "~0.9"
   },
   "require-dev": {
