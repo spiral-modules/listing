@@ -43,6 +43,8 @@ Create view:
 ```php
 <dark:use path="spiral:listing/*" prefix="listing:"/>
 
+<script src ="webroot/dist/sf.listing.js"></script> 
+
 <?php #compile
 /** @var \Database\Account $entity */
 ?>
