@@ -128,8 +128,6 @@ class ListingSerializer implements \JsonSerializable
         $paginator = $this->selector->getPaginator();
 
         if ($paginator instanceof Paginator) {
-            $this->selector->getIterator();
-
             return [
                 'page'         => $paginator->getPage(),
 
@@ -147,9 +145,7 @@ class ListingSerializer implements \JsonSerializable
             ];
         } else {
             return [
-//                'page'   => $paginator->getPage(),
-//                'page'   => $paginator->getOffset() / $paginator->getLimit(),
-                'page'   => 1,
+                'page'   => floor($paginator->getOffset() / $paginator->getLimit()) ?: 1,
                 'limit'  => $paginator->getLimit(),
                 'limits' => $this->listing->getLimits()
             ];
