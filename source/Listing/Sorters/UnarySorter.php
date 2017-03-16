@@ -9,11 +9,9 @@ namespace Spiral\Listing\Sorters;
 
 use Spiral\Database\Builders\SelectQuery;
 use Spiral\Listing\Dependency;
-use Spiral\Listing\Exceptions\SorterException;
 use Spiral\Listing\Prototypes\DependedModificator;
 use Spiral\Listing\SorterInterface;
 use Spiral\Listing\Traits\SelectorValidationTrait;
-use Spiral\ODM\Entities\DocumentSelector;
 use Spiral\ORM\Entities\RecordSelector;
 
 /**
@@ -61,10 +59,6 @@ class UnarySorter extends DependedModificator implements SorterInterface
             return $selector;
         }
 
-        if ($selector instanceof DocumentSelector) {
-            return $selector->sortBy($this->sortBy);
-        }
-
-        throw new SorterException("Invalid selector instance");
+        return $selector->sortBy($this->sortBy);
     }
 }
