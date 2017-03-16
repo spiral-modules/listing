@@ -32,7 +32,7 @@ return [
     'databases' => [
         'default' => [
             'server'   => 'mongodb://localhost:27017',
-            'database' => 'spiral-empty',
+            'database' => 'spiral-listing',
             'options'  => ['connect' => true]
         ],
         /*{{databases}}*/

@@ -10,9 +10,7 @@ namespace Spiral\Tests\Listing;
 
 
 use Faker;
-use Spiral\Database\Builders\SelectQuery;
 use Spiral\Http\Request\InputInterface;
-use Spiral\Listing\Dependency;
 use Spiral\Listing\Filters\SearchFilter;
 use Spiral\Listing\Filters\ValueFilter;
 use Spiral\Listing\InputState;
@@ -20,12 +18,14 @@ use Spiral\Listing\Listing;
 use Spiral\Listing\ListingSerializer;
 use Spiral\Listing\Sorters\BinarySorter;
 use Spiral\Listing\StaticState;
+use Spiral\ODM\Document;
+use Spiral\ODM\Entities\DocumentSelector;
 use Spiral\Tests\BaseTest;
-use TestApplication\Database\ORM\Profile;
-use TestApplication\Database\ORM\Sources\UserSource;
-use TestApplication\Database\ORM\User;
+use TestApplication\Database\ODM\Profile;
+use TestApplication\Database\ODM\Sources\UserSource;
+use TestApplication\Database\ODM\User;
 
-class ORMListingTest extends BaseTest
+class ODMListingTest extends BaseTest
 {
     const FAKER_SEED        = 6610;
     const LISTING_NAMESPACE = 'users';
@@ -42,6 +42,8 @@ class ORMListingTest extends BaseTest
         $this->source = $this->container->get(UserSource::class);
         $faker = Faker\Factory::create();
         $faker->seed(self::FAKER_SEED);
+
+        $this->odm->collection(User::class)->drop();
 
         for ($i = 0; $i < 500; $i++) {
             $user = $this->source->create([
@@ -79,11 +81,21 @@ class ORMListingTest extends BaseTest
         $this->assertSame($state['limit'], $pagination['limit']);
         $this->assertSame($state['namespace'], $configuration['namespace']);
 
-        $listingItems = $listing->getSelector()->fetchData();
+        $listingItems = $listing->getSelector()->fetchAll();
         $dbItems = $this->source->find($selector['where'])
-            ->load('profile', ['alias' => 'user_profile'])
-            ->orderBy($selector['orderBy'])
-            ->offset($selector['offset'])->limit($selector['limit'])->fetchData();
+            ->orderBy($selector['orderBy'][0], $selector['orderBy'][1])
+            ->offset($selector['offset'])->limit($selector['limit'])->fetchAll();
+
+        $toArray = function ($items) {
+            $array = [];
+            /** @var Document $item */
+            foreach ($items as $item) {
+                $array[] = $item->toArray();
+            }
+        };
+
+        $listingItems = $toArray($listingItems);
+        $dbItems = $toArray($dbItems);
 
         $this->assertSame($dbItems, $listingItems);
     }
@@ -99,7 +111,7 @@ class ORMListingTest extends BaseTest
                     'where'   => [],
                     'offset'  => 0,
                     'limit'   => 25,
-                    'orderBy' => ['user.id' => SelectQuery::SORT_ASC],
+                    'orderBy' => ['user.id', DocumentSelector::ASCENDING],
                 ],
             ],
 
@@ -115,7 +127,7 @@ class ORMListingTest extends BaseTest
                     'where'   => [],
                     'offset'  => 50,
                     'limit'   => 25,
-                    'orderBy' => ['user.id' => SelectQuery::SORT_ASC],
+                    'orderBy' => ['user.id', DocumentSelector::ASCENDING],
                 ],
             ],
 
@@ -133,11 +145,11 @@ class ORMListingTest extends BaseTest
                     'where'   => ['gender' => User::GENDER_MALE],
                     'offset'  => 50,
                     'limit'   => 25,
-                    'orderBy' => ['user.id' => SelectQuery::SORT_ASC],
+                    'orderBy' => ['user.id', DocumentSelector::ASCENDING],
                 ],
             ],
 
-            'sort by dependency' => [
+            'sort by aggregation' => [
                 [
                     'namespace' => self::LISTING_NAMESPACE,
                     'data'      => [
@@ -151,11 +163,11 @@ class ORMListingTest extends BaseTest
                     'where'   => [],
                     'offset'  => 50,
                     'limit'   => 25,
-                    'orderBy' => ['user_profile.hobby' => SelectQuery::SORT_DESC],
+                    'orderBy' => ['user_profile.hobby', DocumentSelector::DESCENDING],
                 ],
             ],
 
-            'filter by dependency' => [
+            'filter by aggregation' => [
                 [
                     'namespace' => self::LISTING_NAMESPACE,
                     'data'      => [
@@ -169,7 +181,7 @@ class ORMListingTest extends BaseTest
                     'where'   => ['user_profile.hobby' => Profile::HOBBY_SPORTS],
                     'offset'  => 50,
                     'limit'   => 25,
-                    'orderBy' => ['user.id' => SelectQuery::SORT_ASC],
+                    'orderBy' => ['user.id', DocumentSelector::ASCENDING],
                 ],
             ],
         ];
@@ -178,20 +190,17 @@ class ORMListingTest extends BaseTest
     private function createListing(InputInterface $input): Listing
     {
         $state = new InputState($input);
-        $selector = $this->source->find()->load('profile');
+        $selector = $this->source->find();
         $listing = new Listing($selector, $state);
-
-        $profile = new Dependency('profile');
 
         $listing->addSorter('id', new BinarySorter('user.id'));
         $listing->addSorter('first_name', new BinarySorter('first_name'));
         $listing->addSorter('last_name', new BinarySorter('last_name'));
         $listing->addSorter('gender', new BinarySorter('gender'));
-        $listing->addSorter('hobby', new BinarySorter('user_profile.hobby', $profile));
+        $listing->addSorter('hobby', new BinarySorter('profile.hobby'));
 
         $listing->addFilter('gender', new ValueFilter('gender'));
-        $listing->addFilter('hobby', new ValueFilter('user_profile.hobby', ValueFilter::TYPE_STRING,
-            $profile));
+        $listing->addFilter('hobby', new ValueFilter('profile.hobby'));
 
         $listing->addFilter('search', new SearchFilter([
             'first_name' => SearchFilter::LIKE_STRING,

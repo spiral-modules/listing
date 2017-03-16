@@ -10,6 +10,7 @@ namespace Spiral\Tests;
 use Monolog\Handler\NullHandler;
 use PHPUnit\Framework\TestCase;
 use Spiral\Core\Traits\SharedTrait;
+use Spiral\Http\Request\InputInterface;
 
 /**
  * @property \Spiral\Core\MemoryInterface             $memory
@@ -26,6 +27,7 @@ use Spiral\Core\Traits\SharedTrait;
  * @property \Spiral\Translator\Translator            $translator
  * @property \Spiral\Database\DatabaseManager         $dbal
  * @property \Spiral\ORM\ORM                          $orm
+ * @property \Spiral\ODM\ODM                          $odm
  * @property \Spiral\Encrypter\EncrypterInterface     $encrypter
  * @property \Spiral\Database\Entities\Database       $db
  * @property \Spiral\Http\Cookies\CookieQueue         $cookies
@@ -52,7 +54,7 @@ abstract class BaseTest extends TestCase
     public function setUp()
     {
         $root = __DIR__ . '/-app-/';
-        $app = $this->app = TestApplication::init(
+        $this->app = TestApplication::init(
             [
                 'root'        => $root,
                 'libraries'   => dirname(__DIR__) . '/vendor/',
@@ -111,5 +113,46 @@ abstract class BaseTest extends TestCase
     protected function iocContainer()
     {
         return $this->app->container;
+    }
+
+    public function createInput(string $namespace, array $input = []): InputInterface
+    {
+        return new class($namespace, $input) implements InputInterface
+        {
+            private $input = [];
+
+            public function __construct($namespace, array $input)
+            {
+                $this->input = [
+                    'query' => [
+                        $namespace => $input
+                    ],
+                ];
+            }
+
+            public function getValue(string $source, string $name = null)
+            {
+                $input = $this->input[$source] ?? [];
+
+                if (empty($name)) {
+                    return $input;
+                }
+
+                foreach (explode('.', $name) as $part) {
+                    if (empty($input[$part])) {
+                        return null;
+                    }
+
+                    $input = $input[$part];
+                }
+
+                return $input;
+            }
+
+            public function withPrefix(string $prefix): InputInterface
+            {
+                throw new \RuntimeException('Not implemented');
+            }
+        };
     }
 }
