@@ -1,6 +1,7 @@
 {
   "name": "spiral/listing",
   "description": "Spiral Framework data listing on steroids",
+  "license": "MIT",
   "authors": [
     {
       "name": "Anton Titov / Wolfy-J",

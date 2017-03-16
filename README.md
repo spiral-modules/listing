@@ -1,5 +1,6 @@
 # Spiral Listing
 
+[![License](https://poser.pugx.org/spiral/listing/license)](https://packagist.org/packages/spiral/listing)
 [![Build Status](https://travis-ci.org/spiral-modules/listing.svg?branch=master)](https://travis-ci.org/spiral-modules/listing)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spiral-modules/listing/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/spiral-modules/listing/?branch=master)
 [![Coverage Status](https://coveralls.io/repos/github/spiral-modules/listing/badge.svg?branch=master)](https://coveralls.io/github/spiral-modules/listing?branch=master)
@@ -43,7 +44,7 @@ Create view:
 ```php
 <dark:use path="spiral:listing/*" prefix="listing:"/>
 
-<script src="webroot/dist/sf.listing.js"></script> 
+<script src="webroot/resources/scripts/sf.listing.js"></script> 
 
 <?php #compile
 /** @var \Database\Account $entity */
