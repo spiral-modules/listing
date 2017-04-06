@@ -10,11 +10,12 @@
   ],
   "require": {
     "php": ">=7.0",
-    "spiral/framework": "~0.9",
-    "spiral/components": "~0.9",
-    "spiral/toolkit": "~0.9"
+    "spiral/framework": "^1.0",
+    "spiral/orm": "^1.0",
+    "spiral/toolkit": "^0.9"
   },
   "require-dev": {
+    "spiral/odm": "^1.0",
     "phpunit/phpunit": "~6.0",
     "mockery/mockery": "^0.9.4",
     "fzaninotto/faker": "^1.6"
