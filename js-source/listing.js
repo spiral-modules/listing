@@ -424,18 +424,10 @@ Listing.prototype.updateListing = function () {
 };
 
 Listing.prototype.addEventListeners = function () {
-    this._performSorting = (e)=> {
-        this.performSorting(e.target);
-    };
-    this._performFilters = (e)=> {
-        this.performFilters(e);
-    };
-    this._performPagination = (e)=> {
-        this.performPagination(e.target);
-    };
-    this._performLimits = ()=> {
-        this.performLimits();
-    };
+    this._performSorting = (e)=> this.performSorting(e.target);
+    this._performFilters = (e)=> this.performFilters(e);
+    this._performPagination = (e)=> this.performPagination(e.target);
+    this._performLimits = ()=> this.performLimits();
 
     if (this.els.sorters) {
         for (let i = 0; i < this.els.sorters.length; ++i) {

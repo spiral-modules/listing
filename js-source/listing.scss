@@ -1,0 +1,76 @@
+.js-sf-listing {
+  [data-sorter] {
+    i {
+      pointer-events: none;
+    }
+    cursor: pointer;
+    white-space: nowrap;
+
+    &:hover {
+      background-color: #f2f2f2;
+    }
+  }
+}
+
+.js-sf-listing-search {
+  i {
+    position: absolute;
+    line-height: 38px;
+    left: 17px;
+  }
+
+  input {
+    padding-left: 30px;
+  }
+}
+
+.js-sf-listing-pagination {
+  li {
+    &:first-child {
+      border: none;
+    }
+
+    a {
+      pointer-events: none;
+    }
+
+    i {
+      font-size: .65rem;
+      &.stacked {
+        &:before {
+          margin: -0.25em;
+        }
+      }
+    }
+  }
+}
+
+.js-sf-listing-limits {
+  &.stacked-right {
+    margin-bottom: -50px;
+    bottom: 70px;
+  }
+
+  .label {
+    position: absolute;
+    left: -45px;
+    line-height: 38px;
+  }
+}
+
+.listing-form {
+  .item-state-search {
+    .btn-icon {
+      top: 3px;
+    }
+  }
+
+  .btn-icon {
+    height: 100%;
+    bottom: 0;
+    top: 0;
+    &:focus {
+      background-color: transparent;
+    }
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "name": "sf-autocomplete",
+  "name": "sf-listing",
   "version": "0.1.0",
   "description": "Spiral Autocomplete",
   "main": "dist/sf.listing.js",

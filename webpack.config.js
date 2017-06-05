@@ -8,7 +8,8 @@ const plugins = require('./webpack/plugins');
 module.exports = {
 
   entry: {
-      "sf.listing": ['./js-source/index.js']
+      "sf.listing": ['./js-source/index.js'],
+      "sf.listing.nostyles": ['./js-source/index-no-styles.js']
   },
 
   output: {

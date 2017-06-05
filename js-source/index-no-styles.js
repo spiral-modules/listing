@@ -1,7 +1,6 @@
 "use strict";
 var sf = require('sf-core');
 var Listing = require('./listing').default;
-requite("./listing.scss");
 
 sf.registerInstanceType(Listing);
 
