@@ -2,6 +2,6 @@
 var sf = require('sf-core');
 var Listing = require('./listing').default;
 
-sf.registerInstanceType(Listing);
+sf.registerInstanceType(Listing, "js-sf-listing");
 
 module.exports = Listing; // ES6 default export will not expose us as global
