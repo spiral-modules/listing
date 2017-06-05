@@ -173,6 +173,7 @@ Listing.prototype.updateControls = function () {
             option.selected = this._config.pagination.limits[i] === this._config.pagination.limit;
             this.els.limits.select.appendChild(option);
         }
+        this.els.limits.select.classList.add('browser-default');// Override materialize select
         this.els.limits.wrapper.setAttribute("class", this.options.limitsWrapperClass);
 
         this.els.limits.wrapper.innerHTML = this.options.limitsLabel;
@@ -182,10 +183,13 @@ Listing.prototype.updateControls = function () {
             this.els.limits.wrapper.classList.add('stacked-right');
         }
 
-        // Make it work with materialize
-        if (window.jQuery && typeof window.jQuery(this.els.limits.select).material_select === "function") {
-            window.jQuery(this.els.limits.select).material_select(this.performLimits.bind(this));
-        }
+        setTimeout(()=> {
+            // Make it work with materialize
+            if (window.$ && typeof window.$(this.els.limits.select).material_select === "function") {
+                this.els.limits.select.classList.remove('browser-default');
+                window.$(this.els.limits.select).material_select(this.performLimits.bind(this));
+            }
+        }, 100);
     }
 
     if (this.els.form) {
