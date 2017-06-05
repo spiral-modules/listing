@@ -518,4 +518,4 @@ Listing.prototype.die = function () {
     delete this;
 };
 
-module.exports = Listing;
+export default Listing;
