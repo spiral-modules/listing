@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/spiral-modules/listing#readme",
   "peerDependencies": {
-    "sf-core": "sfjs/sf.js.git#master"
+    "sf-core": "sfjs/sf.js.git#feature/node-package"
   },
   "devDependencies": {
     "babel-core": "^6.9.1",
