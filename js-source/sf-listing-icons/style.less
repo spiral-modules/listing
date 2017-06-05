@@ -3,9 +3,9 @@
 @font-face {
   font-family: 'sf-listing';
   src:
-          url('#{$icomoon-font-path}/sf-listing.ttf?uykxvx') format('truetype'),
-          url('#{$icomoon-font-path}/sf-listing.woff?uykxvx') format('woff'),
-          url('#{$icomoon-font-path}/sf-listing.svg?uykxvx#sf-listing') format('svg');
+    data-uri('@{icomoon-font-path}/sf-listing.ttf') format('truetype'),
+    data-uri('@{icomoon-font-path}/sf-listing.woff') format('woff'),
+    data-uri('@{icomoon-font-path}/sf-listing.svg') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -27,17 +27,17 @@
 
 .sf-listing-icon-sort-asc {
   &:before {
-    content: $sf-listing-icon-sort-asc;
+    content: @sf-listing-icon-sort-asc;
   }
 }
 .sf-listing-icon-sort-desc {
   &:before {
-    content: $sf-listing-icon-sort-desc;
+    content: @sf-listing-icon-sort-desc;
   }
 }
 .sf-listing-icon-sort {
   &:before {
-    content: $sf-listing-icon-sort;
+    content: @sf-listing-icon-sort;
   }
 }
 

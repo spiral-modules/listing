@@ -122,10 +122,11 @@
       "showMetrics": true,
       "showMetadata": false,
       "cssVars": true,
-      "cssVarsFormat": "scss",
+      "cssVarsFormat": "less",
       "noie8": true,
       "ie7": false,
-      "selector": "i"
+      "selector": "",
+      "classSelector": ".icon"
     },
     "imagePref": {
       "prefix": "icon-",
