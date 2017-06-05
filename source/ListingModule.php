@@ -40,10 +40,10 @@ class ListingModule implements ModuleInterface
      */
     public function publish(PublisherInterface $publisher, DirectoriesInterface $directories)
     {
-        $publisher->publishDirectory(
+        /* $publisher->publishDirectory(
             __DIR__ . '/../resources/scripts/',
             $directories->directory('public') . 'resources/scripts',
             PublisherInterface::OVERWRITE
-        );
+        ); */
     }
 }
