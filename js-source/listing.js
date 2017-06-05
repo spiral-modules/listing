@@ -31,6 +31,16 @@ Listing.prototype._construct = function (sf, node, options) {
 
     this.updateControls();
     this.addEventListeners();
+
+    // Few shortcuts for syntax sugar purposes
+    this._config = this.options.config;
+    this._namespace = this._config.namespace;
+    this._orderQuery = this._namespace + '[order]';
+    this._sortByQuery = this._namespace + '[sortBy]';
+    this._limitQuery = this._namespace + '[limit]';
+    this._pageQuery = this._namespace + '[page]';
+    this._filtersQuery = this._namespace + '[filters]';
+    this._valuesQuery = this._namespace + '[values]';
 };
 
 Listing.prototype.optionsToGrab =
@@ -156,11 +166,11 @@ Listing.prototype.updateControls = function () {
             select: document.createElement('select')
         };
 
-        for (var i = 0; i < this.options.config.pagination.limits.length; i++) {
+        for (var i = 0; i < this._config.pagination.limits.length; i++) {
             var option = document.createElement("option");
-            option.value = this.options.config.pagination.limits[i];
-            option.text = this.options.config.pagination.limits[i];
-            option.selected = this.options.config.pagination.limits[i] === this.options.config.pagination.limit;
+            option.value = this._config.pagination.limits[i];
+            option.text = this._config.pagination.limits[i];
+            option.selected = this._config.pagination.limits[i] === this._config.pagination.limit;
             this.els.limits.select.appendChild(option);
         }
         this.els.limits.wrapper.setAttribute("class", this.options.limitsWrapperClass);
@@ -181,16 +191,16 @@ Listing.prototype.updateControls = function () {
     if (this.els.form) {
         // fill form values
         [].forEach.call(this.els.form.querySelectorAll('input, select'), (input)=> {
-            if (this.options.config.filters && this.options.config.filters[input.name]) {
-                input.value = this.options.config.filters[input.name];
+            if (this._config.filters && this._config.filters[input.name]) {
+                input.value = this._config.filters[input.name];
             }
         });
     }
 
     for (let i = 0; i < this.els.sorters.length; ++i) {
         // add asc & desc icon
-        if (this.els.sorters[i].dataset.sorter === this.options.config.sorting.sorter) {
-            this.els.sorters[i].innerHTML += (this.options.config.sorting.direction === "asc" ? this.options.iconASC : this.options.iconDESC);
+        if (this.els.sorters[i].dataset.sorter === this._config.sorting.sorter) {
+            this.els.sorters[i].innerHTML += (this._config.sorting.direction === "asc" ? this.options.iconASC : this.options.iconDESC);
         } else {
             this.els.sorters[i].innerHTML += this.options.iconSorter;
         }
@@ -199,8 +209,8 @@ Listing.prototype.updateControls = function () {
 
 Listing.prototype.generatePagination = function () {
     let pageCounter = 1;
-    let lastLeft = this.options.config.pagination.page;
-    let lastRight = this.options.config.pagination.page;
+    let lastLeft = this._config.pagination.page;
+    let lastRight = this._config.pagination.page;
 
     this.els.pagination = {
         wrapper: document.createElement('ul'),
@@ -213,7 +223,7 @@ Listing.prototype.generatePagination = function () {
 
     this.pagination = {
         prevPages: [],
-        currentPage: this.options.config.pagination.page,
+        currentPage: this._config.pagination.page,
         nextPages: []
     };
 
@@ -223,33 +233,33 @@ Listing.prototype.generatePagination = function () {
             this.pagination.prevPages.unshift(lastLeft);
             pageCounter++;
         }
-        if ((lastRight + 1) <= this.options.config.pagination.countPages) {
+        if ((lastRight + 1) <= this._config.pagination.countPages) {
             lastRight++;
             this.pagination.nextPages.push(lastRight);
             pageCounter++;
         }
-        if ((lastLeft - 1) < 1 && (lastRight + 1) > this.options.config.pagination.countPages) break;
+        if ((lastLeft - 1) < 1 && (lastRight + 1) > this._config.pagination.countPages) break;
     }
 
     this.els.pagination.wrapper.setAttribute("class", this.options.paginationWrapperClass);
 
     this.els.pagination.firstPage.setAttribute("class",
-        this.options.config.pagination.previousPage ? this.options.paginationPageClass : this.options.paginationDisabledClass);
+        this._config.pagination.firstPage ? this.options.paginationPageClass : this.options.paginationDisabledClass);
     this.els.pagination.firstPage.innerHTML = '<a>' + this.options.paginationFirstContent + '</a>';
     this.els.pagination.firstPage.dataset.page = 1;
 
     this.els.pagination.lastPage.setAttribute("class",
-        this.options.config.pagination.nextPage ? this.options.paginationPageClass : this.options.paginationDisabledClass);
+        this._config.pagination.nextPage ? this.options.paginationPageClass : this.options.paginationDisabledClass);
     this.els.pagination.lastPage.innerHTML = '<a>' + this.options.paginationLastContent + '</a>';
-    this.els.pagination.lastPage.dataset.page = this.options.config.pagination.countPages;
+    this.els.pagination.lastPage.dataset.page = this._config.pagination.countPages;
 
     this.els.pagination.prevPage.setAttribute("class",
-        this.options.config.pagination.previousPage ? this.options.paginationPageClass : this.options.paginationDisabledClass);
+        this._config.pagination.previousPage ? this.options.paginationPageClass : this.options.paginationDisabledClass);
     this.els.pagination.prevPage.innerHTML = '<a>' + this.options.paginationPrevContent + '</a>';
     this.els.pagination.prevPage.dataset.page = this.pagination.currentPage - 1;
 
     this.els.pagination.nextPage.setAttribute("class",
-        this.options.config.pagination.nextPage ? this.options.paginationPageClass : this.options.paginationDisabledClass);
+        this._config.pagination.nextPage ? this.options.paginationPageClass : this.options.paginationDisabledClass);
     this.els.pagination.nextPage.innerHTML = '<a>' + this.options.paginationNextContent + '</a>';
     this.els.pagination.nextPage.dataset.page = this.pagination.currentPage + 1;
 
@@ -271,18 +281,18 @@ Listing.prototype.generatePagination = function () {
 
 Listing.prototype.performSorting = function (sorter) {
     this.searchQuery = this.getQueryParams();
-    this.searchQuery[this.options.config.namespace + '[sortBy]'] = sorter.dataset.sorter;
+    this.searchQuery[this._sortByQuery] = sorter.dataset.sorter;
 
     // click on active sorter changes direction, otherwise direction will be asc
-    if (this.options.config.sorting.sorter === sorter.dataset.sorter) {
-        this.searchQuery[this.options.config.namespace + '[order]'] =
-            ((this.searchQuery[this.options.config.namespace + '[order]'] === 'asc'
-            || !this.searchQuery[this.options.config.namespace + '[order]']) ? 'desc' : 'asc');
+    if (this._config.sorting.sorter === sorter.dataset.sorter) {
+        this.searchQuery[this._orderQuery] =
+            ((this.searchQuery[this._orderQuery] === 'asc'
+            || !this.searchQuery[this._orderQuery]) ? 'desc' : 'asc');
     } else {
-        this.searchQuery[this.options.config.namespace + '[order]'] = 'asc';
+        this.searchQuery[this._orderQuery] = 'asc';
     }
 
-    this.searchQuery[this.options.config.namespace + '[sortBy]'] = sorter.dataset.sorter;
+    this.searchQuery[this._sortByQuery] = sorter.dataset.sorter;
     this.updateListing();
 };
 
@@ -291,10 +301,10 @@ Listing.prototype.performFilters = function (e) {
     this.searchQuery = this.getQueryParams();
 
     if (e.target.value) {
-        if (!this.options.config.filters[e.target.name]) {
-            this.searchQuery[this.options.config.namespace + '[filters][' + this.newFilterIndex() + ']'] = e.target.name;
+        if (!this._config.filters[e.target.name]) {
+            this.searchQuery[`${this._filtersQuery}[${this.newFilterIndex()}]`] = e.target.name;
         }
-        this.searchQuery[this.options.config.namespace + '[values][' + e.target.name + ']'] = e.target.value;
+        this.searchQuery[`${this._valuesQuery}[${e.target.name}]`] = e.target.value;
     } else {
         this.clearFilter(e);
     }
@@ -314,7 +324,7 @@ Listing.prototype.clearFilter = function (e) {
         }
     }
 
-    delete this.searchQuery[this.options.config.namespace + '[values][' + e.target.name + ']'];
+    delete this.searchQuery[`${this._valuesQuery}[${e.target.name}]`];
 };
 
 /**
@@ -344,7 +354,7 @@ Listing.prototype.newFilterIndex = function () {
     let index = null;
 
     while (!index) {
-        if (this.searchQuery[this.options.config.namespace + '[filters][' + i + ']']) {
+        if (this.searchQuery[this._filtersQuery + '[' + i + ']']) {
             i++;
         } else {
             index = i;
@@ -361,7 +371,7 @@ Listing.prototype.performPagination = function (pageNode) {
     if (+pageNode.dataset.page === 1) {
         this.clearPagination();
     } else {
-        this.searchQuery[this.options.config.namespace + '[page]'] = pageNode.dataset.page;
+        this.searchQuery[this._pageQuery] = pageNode.dataset.page;
     }
 
     this.updateListing();
@@ -370,33 +380,39 @@ Listing.prototype.performPagination = function (pageNode) {
 Listing.prototype.performLimits = function () {
     this.searchQuery = this.getQueryParams();
 
-    if (+this.els.limits.select.value === this.options.config.pagination.limits[0]) {
-        delete this.searchQuery[this.options.config.namespace + '[limit]'];
+    if (+this.els.limits.select.value === this._config.pagination.limits[0]) {
+        delete this.searchQuery[this._limitQuery];
     } else {
-        this.searchQuery[this.options.config.namespace + '[limit]'] = this.els.limits.select.value;
+        this.searchQuery[this._limitQuery] = this.els.limits.select.value;
     }
 
     this.updateListing();
 };
 
 Listing.prototype.clearPagination = function () {
-    delete this.searchQuery[this.options.config.namespace + '[page]'];
+    delete this.searchQuery[this._pageQuery];
 };
 
 Listing.prototype.getQueryParams = function (str) {
     return (str || document.location.search) ? ((str || document.location.search).replace(/(^\?)/, '').split("&").map(function (n) {
-        return n = n.split("="), this[n[0]] = n[1], this; // TODO: WTF is that?
+        return n = n.split("="), this[n[0]] = decodeURIComponent(n[1]), this; // TODO: WTF is that?
     }.bind({}))[0]) : {};
 };
 
+/**
+ * TODO: Should urlencode?
+ * Encode object to URL form
+ * @param {Object} obj
+ * @return {*}
+ */
 Listing.prototype.stringifyObject = function (obj) {
     if (Object.getOwnPropertyNames(obj).length === 0) return "";
 
-    var query = "?";
+    let query = "?";
 
     for (var key in obj) {
         if (obj.hasOwnProperty(key)) {
-            query += key + '=' + obj[key] + "&";
+            query += key + '=' + encodeURIComponent(obj[key]) + "&";
         }
     }
 
