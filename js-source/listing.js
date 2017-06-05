@@ -18,6 +18,16 @@ Listing.prototype._construct = function (sf, node, options) {
         this.options = Object.assign(this.options, options);
     }
 
+    // Few shortcuts for syntax sugar purposes
+    this._config = this.options.config;
+    this._namespace = this._config.namespace;
+    this._orderQuery = this._namespace + '[order]';
+    this._sortByQuery = this._namespace + '[sortBy]';
+    this._limitQuery = this._namespace + '[limit]';
+    this._pageQuery = this._namespace + '[page]';
+    this._filtersQuery = this._namespace + '[filters]';
+    this._valuesQuery = this._namespace + '[values]';
+
     this.listingId = node.id;
 
     this.els = {
@@ -31,16 +41,6 @@ Listing.prototype._construct = function (sf, node, options) {
 
     this.updateControls();
     this.addEventListeners();
-
-    // Few shortcuts for syntax sugar purposes
-    this._config = this.options.config;
-    this._namespace = this._config.namespace;
-    this._orderQuery = this._namespace + '[order]';
-    this._sortByQuery = this._namespace + '[sortBy]';
-    this._limitQuery = this._namespace + '[limit]';
-    this._pageQuery = this._namespace + '[page]';
-    this._filtersQuery = this._namespace + '[filters]';
-    this._valuesQuery = this._namespace + '[values]';
 };
 
 Listing.prototype.optionsToGrab =
