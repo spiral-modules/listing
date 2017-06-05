@@ -33,6 +33,7 @@
 }
 .js-sf-listing [data-sorter] i {
   pointer-events: none;
+  padding-left: 10px;
 }
 .js-sf-listing [data-sorter]:hover {
   background-color: #f2f2f2;
