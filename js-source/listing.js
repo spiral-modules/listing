@@ -64,15 +64,15 @@ Listing.prototype.optionsToGrab =
         }
     },
     iconASC: {
-        value: '<i class="toolkit-icon-sort-up"></i>',
+        value: '<i class="sf-listing-icon-sort-asc"></i>',
         domAttr: "data-icon-asc"
     },
     iconDESC: {
-        value: '<i class="toolkit-icon-sort-down"></i>',
-        domAttr: "data-icon-asc"
+        value: '<i class="sf-listing-icon-sort-desc"></i>',
+        domAttr: "data-icon-desc"
     },
     iconSorter: {
-        value: '<i class="toolkit-icon-down"></i>',
+        value: '<i class="sf-listing-icon-sort"></i>',
         domAttr: "data-icon-sorter"
     },
     pagination: {
