@@ -8,7 +8,7 @@
     "build": "npm run clean && npm run build:prod && npm run build:less",
     "build:prod": "cross-env NODE_ENV=production webpack -p",
     "build:dev": "cross-env NODE_ENV=development webpack -p",
-    "build:less": "lessc --source-map js-source/listing.less dist/sf.listing.css",
+    "build:less": "lessc -ru --source-map js-source/listing.less dist/sf.listing.css",
     "clean": "rimraf /dist",
     "prepublish": "npm run build",
     "clean-after-deploy": "rimraf node_modules/"
