@@ -70,7 +70,7 @@ class ValueFilter extends AbstractFilter
                 return is_float($value) || is_numeric($value);
         }
 
-        throw new FilterException("Invalid filter value type");
+        throw new FilterException("Invalid filter value type \"{$this->type}\"");
     }
 
     /**
@@ -124,6 +124,6 @@ class ValueFilter extends AbstractFilter
                 return floatval($value);
         }
 
-        throw new FilterException("Invalid filter value type");
+        throw new FilterException("Invalid filter value type \"{$this->type}\"");
     }
 }
