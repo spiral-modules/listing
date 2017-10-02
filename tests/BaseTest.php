@@ -149,7 +149,7 @@ abstract class BaseTest extends TestCase
                 return $input;
             }
 
-            public function withPrefix(string $prefix): InputInterface
+            public function withPrefix(string $prefix, bool $add = true): InputInterface
             {
                 throw new \RuntimeException('Not implemented');
             }
